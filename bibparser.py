@@ -44,16 +44,18 @@ for id in new_bib_data.entries:
         # same for entry2
         entry2.persons["author"].sort(key=lambda x: str(x))
         # Check if title, author and year exist in both entries
-        if ("title" in entry.fields and "title" in entry2.fields and "author" in entry.persons
-            and "author" in entry2.persons and "year" in entry.fields and "year" in entry2.fields
-                and entry.fields["title"] == entry2.fields["title"]
+        if ((("title" in entry.fields and "title" in entry2.fields and entry.fields["title"] == entry2.fields["title"])
+             or ("booktitle" in entry.fields and "booktitle" in entry2.fields and entry.fields["booktitle"] == entry2.fields["booktitle"]))
+                and "author" in entry.persons and "author" in entry2.persons and "year" in entry.fields and "year" in entry2.fields
                 and entry.persons["author"] == entry2.persons["author"]
                 and entry.fields["year"] == entry2.fields["year"]):
                 ids_to_remove.append(entry.key)
                 num_reject += 1
                 break;
         # Check if title and year exist in both entries
-        elif ("title" in entry.fields and "title" in entry2.fields and "year" in entry.fields
+        elif ((("title" in entry.fields and "title" in entry2.fields and entry.fields["title"] == entry2.fields["title"])
+                or ("booktitle" in entry.fields and "booktitle" in entry2.fields and entry.fields["booktitle"] == entry2.fields["booktitle"]))
+              and "year" in entry.fields
               and "year" in entry2.fields and entry.fields["title"] == entry2.fields["title"]
               and entry.fields["year"] == entry2.fields["year"]):
             # Ask user if the entries are the same and if yes, add the entry to ids_to_remove, if
@@ -98,8 +100,9 @@ for id in new_bib_data.entries:
                     print("Please enter y or n")
             break;
         # Check if title and author exist in both entries
-        elif ("title" in entry.fields and "title" in entry2.fields and "author" in entry.persons
-              and "author" in entry2.persons and entry.fields["title"] == entry2.fields["title"]
+        elif ((("title" in entry.fields and "title" in entry2.fields and entry.fields["title"] == entry2.fields["title"]
+                or ("booktitle" in entry.fields and "booktitle" in entry2.fields and entry.fields["booktitle"] == entry2.fields["booktitle"])))
+              and "author" in entry.persons and "author" in entry2.persons
               and entry.persons["author"] == entry2.persons["author"]):
             # Ask user if the entries are the same and if yes, add the entry to ids_to_remove
             print("#######################################################")
@@ -118,7 +121,47 @@ for id in new_bib_data.entries:
                     break
                 else:
                     print("Please enter y or n")
-            break;
+            break
+        # Check if only title exists and is equal in both entries
+        elif ("title" in entry.fields and "title" in entry2.fields and entry.fields["title"] == entry2.fields["title"]):
+            # Ask user if the entries are the same and if yes, add the entry to ids_to_remove
+            print("#######################################################")
+            print("#######################################################")
+            print("Title match:")
+            print(entry.to_string("bibtex"))
+            print(entry2.to_string("bibtex"))
+            print("Do you want to remove the entry? (y/n)")
+            while True:
+                answer = input()
+                if answer == "y":
+                    ids_to_remove.append(entry.key)
+                    num_reject += 1
+                    break
+                elif answer == "n":
+                    break
+                else:
+                    print("Please enter y or n")
+            break
+        # Check if only booktitle exists and is equal in both entries
+        elif ("booktitle" in entry.fields and "booktitle" in entry2.fields and entry.fields["booktitle"] == entry2.fields["booktitle"]):
+            # Ask user if the entries are the same and if yes, add the entry to ids_to_remove
+            print("#######################################################")
+            print("#######################################################")
+            print("Booktitle match:")
+            print(entry.to_string("bibtex"))
+            print(entry2.to_string("bibtex"))
+            print("Do you want to remove the entry? (y/n)")
+            while True:
+                answer = input()
+                if answer == "y":
+                    ids_to_remove.append(entry.key)
+                    num_reject += 1
+                    break
+                elif answer == "n":
+                    break
+                else:
+                    print("Please enter y or n")
+            break
 
 # Compare entries in new_bib_data by title, author and year with the entries in pre_accept_data
 # If all three are equal, the entry is added to ids_to_remove
@@ -132,9 +175,9 @@ for id in new_bib_data.entries:
         # same for entry2
         entry2.persons["author"].sort(key=lambda x: str(x))
         # Check if title, author and year exist in both entries
-        if ("title" in entry.fields and "title" in entry2.fields and "author" in entry.persons
-            and "author" in entry2.persons and "year" in entry.fields and "year" in entry2.fields
-                and entry.fields["title"] == entry2.fields["title"]
+        if ((("title" in entry.fields and "title" in entry2.fields and entry.fields["title"] == entry2.fields["title"])
+             or ("booktitle" in entry.fields and "booktitle" in entry2.fields and entry.fields["booktitle"] == entry2.fields["booktitle"]))
+                and "author" in entry.persons and "author" in entry2.persons and "year" in entry.fields and "year" in entry2.fields
                 and entry.persons["author"] == entry2.persons["author"]
                 and entry.fields["year"] == entry2.fields["year"]):
                 ids_to_remove.append(entry.key)
@@ -161,9 +204,11 @@ for id in new_bib_data.entries:
                 else:
                     print("Please enter y or n")
                 break
-        # Check if author and year exist in both entries
-        elif ("author" in entry.persons and "author" in entry2.persons and "year" in entry.fields and "year" in entry2.fields
-              and entry.persons["author"] == entry2.persons["author"] and entry.fields["year"] == entry2.fields["year"]):
+        # Check if title and author exist in both entries
+        elif ((("title" in entry.fields and "title" in entry2.fields and entry.fields["title"] == entry2.fields["title"]
+                or ("booktitle" in entry.fields and "booktitle" in entry2.fields and entry.fields["booktitle"] == entry2.fields["booktitle"])))
+              and "author" in entry.persons and "author" in entry2.persons
+              and entry.persons["author"] == entry2.persons["author"]):
             # Ask user if the entries are the same and if yes, add the entry to ids_to_remove
             print("#######################################################")
             print("#######################################################")
@@ -183,8 +228,9 @@ for id in new_bib_data.entries:
                     print("Please enter y or n")
                 break
         # Check if title and author exist in both entries
-        elif ("title" in entry.fields and "title" in entry2.fields and "author" in entry.persons
-              and "author" in entry2.persons and entry.fields["title"] == entry2.fields["title"]
+        elif ((("title" in entry.fields and "title" in entry2.fields and entry.fields["title"] == entry2.fields["title"]
+                or ("booktitle" in entry.fields and "booktitle" in entry2.fields and entry.fields["booktitle"] == entry2.fields["booktitle"])))
+              and "author" in entry.persons and "author" in entry2.persons
               and entry.persons["author"] == entry2.persons["author"]):
             # Ask user if the entries are the same and if yes, add the entry to ids_to_remove
             print("#######################################################")
@@ -199,6 +245,46 @@ for id in new_bib_data.entries:
                 if answer == "y":
                     ids_to_remove.append(entry.key)
                     num_accept += 1
+                    break
+                elif answer == "n":
+                    break
+                else:
+                    print("Please enter y or n")
+            break
+        # Check if only title exists and is equal in both entries
+        elif ("title" in entry.fields and "title" in entry2.fields and entry.fields["title"] == entry2.fields["title"]):
+            # Ask user if the entries are the same and if yes, add the entry to ids_to_remove
+            print("#######################################################")
+            print("#######################################################")
+            print("Title match:")
+            print(entry.to_string("bibtex"))
+            print(entry2.to_string("bibtex"))
+            print("Do you want to remove the entry? (y/n)")
+            while True:
+                answer = input()
+                if answer == "y":
+                    ids_to_remove.append(entry.key)
+                    num_accept += 1
+                    break
+                elif answer == "n":
+                    break
+                else:
+                    print("Please enter y or n")
+            break
+        # Check if only booktitle exists and is equal in both entries
+        elif ("booktitle" in entry.fields and "booktitle" in entry2.fields and entry.fields["booktitle"] == entry2.fields["booktitle"]):
+            # Ask user if the entries are the same and if yes, add the entry to ids_to_remove
+            print("#######################################################")
+            print("#######################################################")
+            print("Booktitle match:")
+            print(entry.to_string("bibtex"))
+            print(entry2.to_string("bibtex"))
+            print("Do you want to remove the entry? (y/n)")
+            while True:
+                answer = input()
+                if answer == "y":
+                    ids_to_remove.append(entry.key)
+                    num_reject += 1
                     break
                 elif answer == "n":
                     break
