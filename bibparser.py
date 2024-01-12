@@ -45,7 +45,7 @@ for id in new_bib_data.entries:
         entry2.persons["author"].sort(key=lambda x: str(x))
         # Check if title, author and year exist in both entries
         if ((("title" in entry.fields and "title" in entry2.fields and entry.fields["title"] == entry2.fields["title"])
-             or ("booktitle" in entry.fields and "booktitle" in entry2.fields and entry.fields["booktitle"] == entry2.fields["booktitle"]))
+             or ("title" not in entry.fields and "booktitle" in entry.fields and "booktitle" in entry2.fields and entry.fields["booktitle"] == entry2.fields["booktitle"]))
                 and "author" in entry.persons and "author" in entry2.persons and "year" in entry.fields and "year" in entry2.fields
                 and entry.persons["author"] == entry2.persons["author"]
                 and entry.fields["year"] == entry2.fields["year"]):
@@ -54,7 +54,7 @@ for id in new_bib_data.entries:
                 break;
         # Check if title and year exist in both entries
         elif ((("title" in entry.fields and "title" in entry2.fields and entry.fields["title"] == entry2.fields["title"])
-                or ("booktitle" in entry.fields and "booktitle" in entry2.fields and entry.fields["booktitle"] == entry2.fields["booktitle"]))
+                or ("title" not in entry.fields and "booktitle" in entry.fields and "booktitle" in entry2.fields and entry.fields["booktitle"] == entry2.fields["booktitle"]))
               and "year" in entry.fields
               and "year" in entry2.fields and entry.fields["title"] == entry2.fields["title"]
               and entry.fields["year"] == entry2.fields["year"]):
@@ -65,7 +65,7 @@ for id in new_bib_data.entries:
             print("Title and year match:")
             print(entry.to_string("bibtex"))
             print(entry2.to_string("bibtex"))
-            print("Do you want to remove the entry? (y/n)")
+            print("Is this the same entry? (y/n)")
             while True:
                 answer = input()
                 if answer == "y":
@@ -87,7 +87,7 @@ for id in new_bib_data.entries:
             print("Author and year match:")
             print(entry.to_string("bibtex"))
             print(entry2.to_string("bibtex"))
-            print("Do you want to remove the entry? (y/n)")
+            print("Is this the same entry? (y/n)")
             while True:
                 answer = input()
                 if answer == "y":
@@ -101,7 +101,7 @@ for id in new_bib_data.entries:
             break;
         # Check if title and author exist in both entries
         elif ((("title" in entry.fields and "title" in entry2.fields and entry.fields["title"] == entry2.fields["title"]
-                or ("booktitle" in entry.fields and "booktitle" in entry2.fields and entry.fields["booktitle"] == entry2.fields["booktitle"])))
+                or ("title" not in entry.fields and "booktitle" in entry.fields and "booktitle" in entry2.fields and entry.fields["booktitle"] == entry2.fields["booktitle"])))
               and "author" in entry.persons and "author" in entry2.persons
               and entry.persons["author"] == entry2.persons["author"]):
             # Ask user if the entries are the same and if yes, add the entry to ids_to_remove
@@ -110,7 +110,7 @@ for id in new_bib_data.entries:
             print("Title and author match:")
             print(entry.to_string("bibtex"))
             print(entry2.to_string("bibtex"))
-            print("Do you want to remove the entry? (y/n)")
+            print("Is this the same entry? (y/n)")
             while True:
                 answer = input()
                 if answer == "y":
@@ -130,7 +130,7 @@ for id in new_bib_data.entries:
             print("Title match:")
             print(entry.to_string("bibtex"))
             print(entry2.to_string("bibtex"))
-            print("Do you want to remove the entry? (y/n)")
+            print("Is this the same entry? (y/n)")
             while True:
                 answer = input()
                 if answer == "y":
@@ -150,7 +150,7 @@ for id in new_bib_data.entries:
             print("Booktitle match:")
             print(entry.to_string("bibtex"))
             print(entry2.to_string("bibtex"))
-            print("Do you want to remove the entry? (y/n)")
+            print("Is this the same entry? (y/n)")
             while True:
                 answer = input()
                 if answer == "y":
@@ -176,7 +176,7 @@ for id in new_bib_data.entries:
         entry2.persons["author"].sort(key=lambda x: str(x))
         # Check if title, author and year exist in both entries
         if ((("title" in entry.fields and "title" in entry2.fields and entry.fields["title"] == entry2.fields["title"])
-             or ("booktitle" in entry.fields and "booktitle" in entry2.fields and entry.fields["booktitle"] == entry2.fields["booktitle"]))
+             or ("title" not in entry.fields and "booktitle" in entry.fields and "booktitle" in entry2.fields and entry.fields["booktitle"] == entry2.fields["booktitle"]))
                 and "author" in entry.persons and "author" in entry2.persons and "year" in entry.fields and "year" in entry2.fields
                 and entry.persons["author"] == entry2.persons["author"]
                 and entry.fields["year"] == entry2.fields["year"]):
@@ -184,15 +184,18 @@ for id in new_bib_data.entries:
                 num_accept += 1
                 break;
         # Check if title and year exist in both entries
-        elif ("title" in entry.fields and "title" in entry2.fields and "year" in entry.fields and "year" in entry2.fields
-              and entry.fields["title"] == entry2.fields["title"] and entry.fields["year"] == entry2.fields["year"]):
+        elif ((("title" in entry.fields and "title" in entry2.fields and entry.fields["title"] == entry2.fields["title"])
+                or ("title" not in entry.fields and "booktitle" in entry.fields and "booktitle" in entry2.fields and entry.fields["booktitle"] == entry2.fields["booktitle"]))
+              and "year" in entry.fields
+              and "year" in entry2.fields and entry.fields["title"] == entry2.fields["title"]
+              and entry.fields["year"] == entry2.fields["year"]):
             # Ask user if the entries are the same and if yes, add the entry to ids_to_remove
             print("#######################################################")
             print("#######################################################")
             print("Title and year match:")
             print(entry.to_string("bibtex"))
             print(entry2.to_string("bibtex"))
-            print("Do you want to remove the entry? (y/n)")
+            print("Is this the same entry? (y/n)")
             while True:
                 answer = input()
                 if answer == "y":
@@ -205,17 +208,17 @@ for id in new_bib_data.entries:
                     print("Please enter y or n")
                 break
         # Check if title and author exist in both entries
-        elif ((("title" in entry.fields and "title" in entry2.fields and entry.fields["title"] == entry2.fields["title"]
-                or ("booktitle" in entry.fields and "booktitle" in entry2.fields and entry.fields["booktitle"] == entry2.fields["booktitle"])))
-              and "author" in entry.persons and "author" in entry2.persons
-              and entry.persons["author"] == entry2.persons["author"]):
+        # Check if author and year exist in both entries
+        elif ("author" in entry.persons and "author" in entry2.persons and "year" in entry.fields
+              and "year" in entry2.fields and entry.persons["author"] == entry2.persons["author"]
+              and entry.fields["year"] == entry2.fields["year"]):
             # Ask user if the entries are the same and if yes, add the entry to ids_to_remove
             print("#######################################################")
             print("#######################################################")
             print("Author and year match:")
             print(entry.to_string("bibtex"))
             print(entry2.to_string("bibtex"))
-            print("Do you want to remove the entry? (y/n)")
+            print("Is this the same entry? (y/n)")
             while True:
                 answer = input()
                 if answer == "y":
@@ -229,7 +232,7 @@ for id in new_bib_data.entries:
                 break
         # Check if title and author exist in both entries
         elif ((("title" in entry.fields and "title" in entry2.fields and entry.fields["title"] == entry2.fields["title"]
-                or ("booktitle" in entry.fields and "booktitle" in entry2.fields and entry.fields["booktitle"] == entry2.fields["booktitle"])))
+                or ("title" not in entry.fields and "booktitle" in entry.fields and "booktitle" in entry2.fields and entry.fields["booktitle"] == entry2.fields["booktitle"])))
               and "author" in entry.persons and "author" in entry2.persons
               and entry.persons["author"] == entry2.persons["author"]):
             # Ask user if the entries are the same and if yes, add the entry to ids_to_remove
@@ -238,7 +241,7 @@ for id in new_bib_data.entries:
             print("Title and author match:")
             print(entry.to_string("bibtex"))
             print(entry2.to_string("bibtex"))
-            print("Do you want to remove the entry? (y/n)")
+            print("Is this the same entry? (y/n)")
             while True:
                 answer = input()
                 print(answer)
@@ -259,7 +262,7 @@ for id in new_bib_data.entries:
             print("Title match:")
             print(entry.to_string("bibtex"))
             print(entry2.to_string("bibtex"))
-            print("Do you want to remove the entry? (y/n)")
+            print("Is this the same entry? (y/n)")
             while True:
                 answer = input()
                 if answer == "y":
@@ -279,7 +282,7 @@ for id in new_bib_data.entries:
             print("Booktitle match:")
             print(entry.to_string("bibtex"))
             print(entry2.to_string("bibtex"))
-            print("Do you want to remove the entry? (y/n)")
+            print("Is this the same entry? (y/n)")
             while True:
                 answer = input()
                 if answer == "y":
